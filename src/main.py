@@ -3,7 +3,7 @@
 # (c) JoBe, 2026
 
 
-import git # pip install GitPython
+import git
 
 import pathlib
 import sys
