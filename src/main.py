@@ -31,8 +31,11 @@ DO NOT EDIT.
 | --- | --- | --- |
 """
 
+DEFAULT_BRANCH: str = "HEAD" # IDK, shouldn't this be main or sum?
 
-def get_commits(path: str, branch: str = "HEAD") -> list[tuple[str, str, str, str | None]]:
+
+
+def get_commits(path: str, branch: str = DEFAULT_BRANCH) -> list[tuple[str, str, str, str | None]]:
     """
     Fetch the commit history for the repo with the given branch.
     The returned list is ordered newest to oldest, and each entry is a tuple of
@@ -92,8 +95,16 @@ if __name__ == "__main__":
     AUTHMAP: dict[str, str] = {
     }
 
+    if any(helpflag in sys.argv for helpflag in ("-h", "--h", "-help", "--help")):
+        print("Usage: gh2mdt [repository] [output (optional)]")
+        exit()
+
     repo_path = sys.argv[1]
     result = make_table(get_commits(repo_path))
 
-    with open(f"{repo_path}\\result.md", "w") as out:
+    result_path: str = DEFAULT_RESULT_NAME
+    if len(sys.argv) > 2:
+        result_path = sys.argv[2]
+
+    with open(f"{repo_path}\\{result_path}", "w") as out:
         out.write(result)
