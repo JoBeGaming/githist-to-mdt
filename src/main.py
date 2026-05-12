@@ -106,5 +106,5 @@ if __name__ == "__main__":
     if len(sys.argv) > 2:
         result_path = sys.argv[2]
 
-    with open(f"{repo_path}\\{result_path}", "w") as out:
+    with open(f"{repo_path}/{result_path}", "w") as out:
         out.write(result)
