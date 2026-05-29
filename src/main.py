@@ -17,7 +17,7 @@ __all__ = [
     "HEADER",
 ]
 
-
+DEFAULT_RESULT_NAME: str = "result.md"
 HEADER: str = """
 <!--
 Generated with 'python {}' on {}.
