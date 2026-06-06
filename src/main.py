@@ -26,13 +26,13 @@ Generated with 'python {}' on {}.
 DO NOT EDIT.
 -->
 
-# Versionsgeschichte
+# History
 
-| Autor | Datum | Nachricht |
+| Author | Date | Commit-Message |
 | --- | --- | --- |
 """
 
-DEFAULT_BRANCH: str = "HEAD" # IDK, shouldn't this be main or sum?
+DEFAULT_BRANCH: str = "HEAD"
 
 
 
