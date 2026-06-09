@@ -5,6 +5,7 @@
 
 import git
 
+import collections.abc
 import pathlib
 import sys
 import time
@@ -18,7 +19,7 @@ __all__ = [
 ]
 
 
-DEFAULT_RESULT_NAME: str = "result.md"
+DEFAULT_RESULT_NAME: str = "history.md"
 HEADER: str = """
 <!--
 Generated with 'python {}' on {}.
@@ -36,10 +37,10 @@ DEFAULT_BRANCH: str = "HEAD"
 
 
 
-def get_commits(path: str, branch: str = DEFAULT_BRANCH) -> list[tuple[str, str, str, str | None]]:
+def get_commits(path: str, branch: str = DEFAULT_BRANCH) -> collections.abc.Sequence[tuple[str, str, str, str | None]]:
     """
     Fetch the commit history for the repo with the given branch.
-    The returned list is ordered newest to oldest, and each entry is a tuple of
+    The returned sequence is ordered newest to oldest, where each entry is a tuple of
     - name
     - date (iso)
     - message
@@ -60,12 +61,12 @@ def get_commits(path: str, branch: str = DEFAULT_BRANCH) -> list[tuple[str, str,
 
         remote_url = remote_url.removesuffix(".git")
 
-    commits = []
+    commits: list[tuple[str, str, str, str | None]] = []
 
     for commit in repo.iter_commits(branch):
         author: str = commit.author.name # type: ignore
-        date: str = commit.committed_datetime.isoformat() # type: ignore
-        message: str = commit.message.strip() # type: ignore
+        date = commit.committed_datetime.isoformat()
+        message = str(commit.message.strip())
 
         if remote_url:
             link = f"{remote_url}/commit/{commit.hexsha}"
@@ -81,8 +82,8 @@ def format_iso(date: str) -> str:
     return f"{date[8:10]}.{date[5:7]}.{date[0:4]}"
 
 
-def make_table(commits: list[tuple[str, str, str, str | None]], header: str = HEADER) -> str:
-    result = HEADER.format(' '.join(sys.argv), time.strftime("%d.%m.%Y", time.localtime()))
+def make_table(commits: collections.abc.Sequence[tuple[str, str, str, str | None]], header: str = HEADER) -> str:
+    result = header.format(' '.join(sys.argv), time.strftime("%d.%m.%Y", time.localtime()))
 
     for author, date, message, url in commits:
         if not author in EXCLUDED_AUTHORS:
